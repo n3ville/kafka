@@ -1,8 +1,8 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: Confluent.Kafka.Impl.Librdkafka
 // Assembly: Confluent.Kafka, Version=2.3.0.0, Culture=neutral, PublicKeyToken=12c514ca49093d1e
-// MVID: CCA09D0F-9A2B-49F0-9914-8EE353DF5887
-// Assembly location: C:\Users\antos\Downloads\Confluent.Kafka_nuget.dll
+// MVID: 0FD2604E-1AF8-4FE6-83AB-41FD94F086DC
+// Assembly location: C:\Users\antos\Downloads\Confluent.Kafka_me.dll
 
 using Confluent.Kafka.Admin;
 using Confluent.Kafka.Impl.NativeMethods;
@@ -647,7 +647,8 @@ internal static class Librdkafka
     if (str == null)
     {
       bool flag = IntPtr.Size == 8;
-      string directoryName = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().GetName().EscapedCodeBase).LocalPath);
+      string escapedCodeBase = Assembly.GetExecutingAssembly().GetName().EscapedCodeBase;
+      string directoryName = Path.GetDirectoryName(new Uri("c:\\Tempdb\\kafka\\").LocalPath);
       str = Path.Combine(Path.Combine(directoryName, flag ? Path.Combine("librdkafka", "x64") : Path.Combine("librdkafka", "x86")), "librdkafka.dll");
       if (!File.Exists(str))
         str = Path.Combine(Path.Combine(directoryName, flag ? "runtimes\\win-x64\\native" : "runtimes\\win-x86\\native"), "librdkafka.dll");
@@ -1207,58 +1208,79 @@ internal static class Librdkafka
     IntPtr hglobalAnsi = System.Runtime.InteropServices.Marshal.StringToHGlobalAnsi(topic);
     try
     {
-      rd_kafka_vu* rdKafkaVuPtr = stackalloc rd_kafka_vu[8];
-      rdKafkaVuPtr[0] = new rd_kafka_vu()
+      rd_kafka_vu* rdKafkaVuPtr1 = stackalloc rd_kafka_vu[8];
+      rd_kafka_vu rdKafkaVu1 = new rd_kafka_vu();
+      rdKafkaVu1.vt = rd_kafka_vtype.Topic;
+      rdKafkaVu1.data = new vu_data()
       {
-        vt = rd_kafka_vtype.Topic,
-        data = new vu_data() { topic = hglobalAnsi }
+        topic = hglobalAnsi
       };
-      *(rdKafkaVuPtr + 1) = new rd_kafka_vu()
+      rdKafkaVuPtr1[0] = rdKafkaVu1;
+      rd_kafka_vu* rdKafkaVuPtr2 = rdKafkaVuPtr1 + 1;
+      rdKafkaVu1 = new rd_kafka_vu();
+      rdKafkaVu1.vt = rd_kafka_vtype.Partition;
+      rdKafkaVu1.data = new vu_data()
       {
-        vt = rd_kafka_vtype.Partition,
-        data = new vu_data() { partition = partition }
+        partition = partition
       };
-      *(rdKafkaVuPtr + 2) = new rd_kafka_vu()
+      rd_kafka_vu rdKafkaVu2 = rdKafkaVu1;
+      *rdKafkaVuPtr2 = rdKafkaVu2;
+      rd_kafka_vu* rdKafkaVuPtr3 = rdKafkaVuPtr1 + 2;
+      rdKafkaVu1 = new rd_kafka_vu();
+      rdKafkaVu1.vt = rd_kafka_vtype.MsgFlags;
+      rdKafkaVu1.data = new vu_data()
       {
-        vt = rd_kafka_vtype.MsgFlags,
-        data = new vu_data() { msgflags = msgflags }
+        msgflags = msgflags
       };
-      *(rdKafkaVuPtr + 3) = new rd_kafka_vu()
+      rd_kafka_vu rdKafkaVu3 = rdKafkaVu1;
+      *rdKafkaVuPtr3 = rdKafkaVu3;
+      rd_kafka_vu* rdKafkaVuPtr4 = rdKafkaVuPtr1 + 3;
+      rdKafkaVu1 = new rd_kafka_vu();
+      rdKafkaVu1.vt = rd_kafka_vtype.Value;
+      rdKafkaVu1.data = new vu_data()
       {
-        vt = rd_kafka_vtype.Value,
-        data = new vu_data()
+        val = new ptr_and_size() { ptr = val, size = len }
+      };
+      rd_kafka_vu rdKafkaVu4 = rdKafkaVu1;
+      *rdKafkaVuPtr4 = rdKafkaVu4;
+      rd_kafka_vu* rdKafkaVuPtr5 = rdKafkaVuPtr1 + 4;
+      rdKafkaVu1 = new rd_kafka_vu();
+      rdKafkaVu1.vt = rd_kafka_vtype.Key;
+      rdKafkaVu1.data = new vu_data()
+      {
+        key = new ptr_and_size()
         {
-          val = new ptr_and_size() { ptr = val, size = len }
+          ptr = key,
+          size = keylen
         }
       };
-      *(rdKafkaVuPtr + 4) = new rd_kafka_vu()
+      rd_kafka_vu rdKafkaVu5 = rdKafkaVu1;
+      *rdKafkaVuPtr5 = rdKafkaVu5;
+      rd_kafka_vu* rdKafkaVuPtr6 = rdKafkaVuPtr1 + 5;
+      rdKafkaVu1 = new rd_kafka_vu();
+      rdKafkaVu1.vt = rd_kafka_vtype.Timestamp;
+      rdKafkaVu1.data = new vu_data()
       {
-        vt = rd_kafka_vtype.Key,
-        data = new vu_data()
-        {
-          key = new ptr_and_size()
-          {
-            ptr = key,
-            size = keylen
-          }
-        }
+        timestamp = timestamp
       };
-      *(rdKafkaVuPtr + 5) = new rd_kafka_vu()
+      rd_kafka_vu rdKafkaVu6 = rdKafkaVu1;
+      *rdKafkaVuPtr6 = rdKafkaVu6;
+      rd_kafka_vu* rdKafkaVuPtr7 = rdKafkaVuPtr1 + 6;
+      rdKafkaVu1 = new rd_kafka_vu();
+      rdKafkaVu1.vt = rd_kafka_vtype.Headers;
+      rdKafkaVu1.data = new vu_data() { headers = headers };
+      rd_kafka_vu rdKafkaVu7 = rdKafkaVu1;
+      *rdKafkaVuPtr7 = rdKafkaVu7;
+      rd_kafka_vu* rdKafkaVuPtr8 = rdKafkaVuPtr1 + 7;
+      rdKafkaVu1 = new rd_kafka_vu();
+      rdKafkaVu1.vt = rd_kafka_vtype.Opaque;
+      rdKafkaVu1.data = new vu_data()
       {
-        vt = rd_kafka_vtype.Timestamp,
-        data = new vu_data() { timestamp = timestamp }
+        opaque = msg_opaque
       };
-      *(rdKafkaVuPtr + 6) = new rd_kafka_vu()
-      {
-        vt = rd_kafka_vtype.Headers,
-        data = new vu_data() { headers = headers }
-      };
-      *(rdKafkaVuPtr + 7) = new rd_kafka_vu()
-      {
-        vt = rd_kafka_vtype.Opaque,
-        data = new vu_data() { opaque = msg_opaque }
-      };
-      rd_kafka_vu* vus = rdKafkaVuPtr;
+      rd_kafka_vu rdKafkaVu8 = rdKafkaVu1;
+      *rdKafkaVuPtr8 = rdKafkaVu8;
+      rd_kafka_vu* vus = rdKafkaVuPtr1;
       return Librdkafka.GetErrorCodeAndDestroy(Librdkafka._produceva(rk, vus, new IntPtr(8)));
     }
     finally
@@ -1271,9 +1293,9 @@ internal static class Librdkafka
   {
     if (ptr == IntPtr.Zero)
       return ErrorCode.NoError;
-    int errorCodeAndDestroy = (int) Librdkafka.error_code(ptr);
+    ErrorCode errorCodeAndDestroy = Librdkafka.error_code(ptr);
     Librdkafka.error_destroy(ptr);
-    return (ErrorCode) errorCodeAndDestroy;
+    return errorCodeAndDestroy;
   }
 
   internal static ErrorCode flush(IntPtr rk, IntPtr timeout_ms)
